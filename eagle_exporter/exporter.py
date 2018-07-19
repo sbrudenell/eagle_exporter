@@ -1,5 +1,7 @@
 import argparse
 import http.server
+import logging
+import sys
 
 import prometheus_client
 
@@ -9,6 +11,7 @@ import eagle_exporter
 def main():
     parser = argparse.ArgumentParser("Eagle Parser")
 
+    parser.add_argument("--verbose", "-v", action="count")
     parser.add_argument("--port", type=int, default=9597)
     parser.add_argument("--bind_address", default="0.0.0.0")
     parser.add_argument("--model", choices=("eagle200",), required=True)
@@ -17,6 +20,13 @@ def main():
     parser.add_argument("--install_code", required=True)
 
     args = parser.parse_args()
+
+    if args.verbose:
+        level = logging.DEBUG
+    else:
+        level = logging.INFO
+
+    logging.basicConfig(stream=sys.stdout, level=level)
 
     if not args.address and not args.cloud_id:
         parser.error("--address or --cloud_id must be specified")
