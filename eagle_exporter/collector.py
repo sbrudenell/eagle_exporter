@@ -1,4 +1,4 @@
-import prometheus_client
+import prometheus_client.core
 
 
 class Eagle200Collector(object):
